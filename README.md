@@ -16,15 +16,20 @@ So I decided to create this way of having "Stack variables" in addition to the c
 javascript already has.
 
 There is an environment (which is to say a javascript object) which gets extended in each and every
-function call into another object, and passed into the called function. The called function gets an
-object containing the environment of the above function, and it can add to it easily by declaring
-"stack variables". In turn, this function can call other functions and they will be able to use these
-values. When this function returns, the environment "chain" is shortened again. The above functions
-will not be able to access "stack" variables in the below functions, but the opposite is true. Just
-like in lexical closures. Unlike in lexical closures, a called function will not be able to mess with
-the caller's environment, because this is copy-on-write. But if you defined an object as a stack variable
-above, the object properties can be changed below and that change impacts above too. This is because
-objects are mutable.
+function call into another object, which is passed into the called function. The called function can
+add to this environment to declare "stack variables", which are accessible there and in any function it calls.
+
+This function can in turn call other functions and they will be able to use these values and add
+values of their own. As functions return, the "environment" they used gets deleted, unless stored elsewhere,
+by the garbage collector.
+
+The caller will not be able to access "stack" variables declared in the callee, but the opposite is true. Just
+like in lexical closures. However, unlike in lexical closures, a called function will not be able to mess with
+the caller's environment, instead it shadows the variables created above (without deleting them).
+
+If you really want to expose variables to be changed below, you can declare an object. Since objects are mutable,
+their values can be changed below without shadowing or copying.
+
 
 How?
 ----
@@ -32,7 +37,7 @@ The core behaviour is achieved through the prototype chain. Every call will crea
 inheriting through the prototype chain from the "env" object present in the caller.
 
 This simple system can be used to implement object orientation of sorts (when you don't need the full class thing),
-share application configuration settings and change them slightly across "zones" in your app.
+share application configuration settings across the whole app, and change them slightly across "zones" in your app.
 
 
 Roadmap
