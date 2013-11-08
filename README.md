@@ -1,7 +1,7 @@
 env.js
 ======
 
-Stack-oriented, per-call closures for passing variables, like environment variables in unix. Shoved into JavaScript.
+Stack-oriented, per-call closures for passing values into other functions, like environment variables in unix. Shoved into JavaScript.
 
 
 WTF Is Wrong With You?
@@ -31,6 +31,17 @@ If you really want to expose variables to be changed below, you can declare an o
 their values can be changed below without shadowing or copying.
 
 
+This stinks of global variables to me
+-------------------------------------
+
+I am always obsessed with program correctness, and I have thought of that too. I prefer to think that
+these are "context variables". In *nix systems, you can use the "env" command to pass specific environment
+variables to new program, and that only affects that program and child processes of it. This idea is similar,
+in that your functions are indeed accessing variables which are global to *them*, but are not really global
+in that you can change them at will. In a way, since this is completely new, maybe it doesn't make sense
+to dismiss it without trying it to see if it is an antipattern, or can lead to antipatterns.
+
+
 How?
 ----
 The core behaviour is achieved through the prototype chain. Every call will create an "env" object
@@ -49,5 +60,7 @@ Roadmap
 - Try to build some apps with it
   - In the DOM
   - On the server
-- See if this works well when the base env is the system's environment variables.
-- Port to other languages if the concept works
+- Try to use this to create an application with plugins, to see if it helps decouple the app, and what problems
+may occur.
+- See if this works well when the base env is the system's environment variables (I'm dying to try this one out).
+- Port to other languages if the concept works. First in line, Python!
