@@ -77,4 +77,44 @@ describe('', function () {
   });
 });
 
+describe('processed code usage examples:', function () {
+  it('closure closure', function (done) {
+    var $env = env.create();
+    $env.lexical = 'yeah';
+    var func = env.bindLexical($env, function ($env) {
+      ok.strictEqual($env.lexical, 'yeah');
+      done();
+    });
+
+    func();
+  });
+  it('stack closure', function (done) {
+    var $env = env.create();
+    var a = env.bindLexical($env, function ($env) {
+      $env.a = true; env.call($env, b);
+    });
+    var b = env.bindLexical($env, function ($env) {
+      $env.b = true; $env.a = false; env.call($env, c);
+    });
+    var c = env.bindLexical($env, function ($env) {
+      ok.strictEqual($env.a, false); ok($env.b); done();
+    });
+
+    a();
+  });
+  it('stack closure vs closure closure', function (done) {
+    var $env = env.create();
+    $env.a = 'in closure';
+    var a = env.bindLexical($env, function ($env) {
+      $env.a = 'in stack';
+      env.call($env, b);
+    });
+    var b = env.bindLexical($env, function ($env) {
+      ok.equal($env.a, 'in stack');
+      done();
+    });
+    env.call($env, a);
+  });
+});
+
 /* vim: set sw=2 sts=2 et: */
