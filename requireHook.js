@@ -16,6 +16,9 @@ module.exports = function addRequireHook() {
   }
 }
 
-module.exports()
+if (module.parent === null) {
+  module.exports();
+  require(process.argv[1]);
+}
 
 /* vim: set sw=2 sts=2 et: */
