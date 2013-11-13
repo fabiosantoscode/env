@@ -48,6 +48,15 @@ describe('', function () {
       ok.strictEqual(spy.lastCall.args[1], 1);
     });
   });
+  describe('env.callMethod', function () {
+    it('calls the method with ctx, env, args', function () {
+      var vader = { 'i am': 'urfather', func: spy };
+      env.callMethod($env, vader, 'func', 1, 2, 3);
+      ok.strictEqual(spy.lastCall.args[0].prop, 'prop');
+      ok.strictEqual(spy.lastCall.args[1], 1);
+      ok.strictEqual(spy.lastCall.thisValue, vader);
+    });
+  });
   describe('envApply', function () {
     it('calls the function with env and args', function () {
       env.apply($env, spy, [1]);
