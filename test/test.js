@@ -42,27 +42,26 @@ describe('', function () {
   beforeEach(function () { spy = sinon.spy(); });
   describe('env.call', function () {
     it('calls the function with env, args', function () {
-      env.call($env, spy, 1);
+      env.call($env, env.bindLexical($env, spy), 1);
       ok(spy.calledOnce);
       ok.strictEqual(spy.lastCall.args[0].prop, 'prop');
       ok.strictEqual(spy.lastCall.args[1], 1);
+    });
+    it('only passes $ENV to lexically bound methods', function () {
+      var notLexicallyBound = function () {
+        ok.equal(this.that, 'is it');
+        ok.equal(arguments.length, 0);
+      }.bind({ that: 'is it' });  //spy.bind({ that: 'is it' });
+      env.call($env, spy);
     });
   });
   describe('env.callMethod', function () {
     it('calls the method with ctx, env, args', function () {
-      var vader = { 'i am': 'urfather', func: spy };
+      var vader = { 'i am': 'urfather', func: env.bindLexical($env, spy) };
       env.callMethod($env, vader, 'func', 1, 2, 3);
       ok.strictEqual(spy.lastCall.args[0].prop, 'prop');
       ok.strictEqual(spy.lastCall.args[1], 1);
       ok.strictEqual(spy.lastCall.thisValue, vader);
-    });
-  });
-  describe('envApply', function () {
-    it('calls the function with env and args', function () {
-      env.apply($env, spy, [1]);
-      ok(spy.calledOnce);
-      ok.strictEqual(spy.lastCall.args[0].prop, 'prop');
-      ok.strictEqual(spy.lastCall.args[1], 1);
     });
   });
   describe('envBind', function () {

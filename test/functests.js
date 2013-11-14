@@ -9,11 +9,11 @@ var functestFolder = path.join(__dirname, '../functest');
 var tests = fs.readdirSync(functestFolder)
   .filter(/r/.test.bind(/\.js*/))
   .filter(/r/.test.bind(/^[^.]/))
-  .map(function (file) {
-    return require(path.join(functestFolder, file));
-  })
-  .forEach(function (module) {
-    module.main();
+  .forEach(function (file) {
+    it('functests/' + file, function () {
+      var mod = require(path.join(functestFolder, file));
+      mod.main();
+    });
   });
 
 /* vim: set sw=2 sts=2 et: */

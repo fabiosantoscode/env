@@ -15,7 +15,6 @@ function addRequireHook() {
       filename = path.join(
           path.dirname(filename),
           '.env.' + path.basename(filename, '.env.js')) + '.js';
-      console.log(filename);
 
       fs.writeFileSync(filename, code, utf8);
     }
