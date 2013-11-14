@@ -16,9 +16,9 @@ function precompile(source) {
 
 function postWrap(source) {
   return (
-    '(function ($ENV) {' +
+    '(function () { var env = require(\'env\'); $ENV = env.create(/* root env */)' +
     source +
-    '}(require(\'env.js\').create(/* root env */)))'
+    '}())'
   );
 }
 

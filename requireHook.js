@@ -1,24 +1,37 @@
+'use strict';
 
 var compiler = require('./compiler.js');
-var Module = require('module').Module;
+var path = require('path');
+var fs = require('fs');
 
 var utf8 = { encoding: 'utf-8' };
 
-module.exports = function addRequireHook() {
+function addRequireHook() {
   var oldExt = require.extensions['.js'];
   require.extensions['.js'] = function (module, filename) {
     if (/\.env\.js$/.test(filename)) {
       var code = compiler.compile(fs.readFileSync(filename, utf8));
-      var filename = '.env.' + filename.replace(/\.env\.js$/, '.js');
-      fs.writeFileSync(outName, code, utf8);
+
+      filename = path.join(
+          path.dirname(filename),
+          '.env.' + path.basename(filename, '.env.js')) + '.js';
+      console.log(filename);
+
+      fs.writeFileSync(filename, code, utf8);
     }
     return oldExt(module, filename);
   }
 }
 
 if (module.parent === null) {
-  module.exports();
-  require(process.argv[1]);
+  var path = require('path');
+
+  addRequireHook();
+
+  var fname = path.resolve(process.argv[2], process.env.PWD, process.argv[2]);
+  require(fname);
 }
+
+module.exports = addRequireHook;
 
 /* vim: set sw=2 sts=2 et: */

@@ -2,7 +2,7 @@
   "name": "env",
   "version": "0.0.0",
   "description": "Environment variables in JS function calls",
-  "main": "lib/env.js",
+  "main": "./lib/env.js",
   "directories": {
     "test": "test"
   },

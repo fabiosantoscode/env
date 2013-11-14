@@ -1,5 +1,7 @@
 
-var main = function () {
+var ok = require('assert');
+
+module.exports.main = function () {
   env something = 'something'
   b();
 }
@@ -9,7 +11,7 @@ var b = function () {
 }
 
 var c = function () {
-  console.log(env something);
+  ok.equal(env something, 'something');
 }
 
 /* vim: set sw=2 sts=2 et: */
