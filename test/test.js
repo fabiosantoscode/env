@@ -118,7 +118,7 @@ describe('processed code usage examples:', function () {
       env.call($env, b);
     });
     var b = env.bindLexical($env, function ($env) {
-      ok.equal($env.a, 'in stack');
+      ok.equal($env.a, 'in closure');
       done();
     });
     env.call($env, a);
