@@ -16,7 +16,7 @@ function precompile(source) {
 
 function postWrap(source) {
   return (
-    '(function () { var env = require(\'env\'); $ENV = env.create(/* root env */)' +
+    '(function () { var env = require(\'env\'); var $ENV = env.create(/* root env */);' +
     source +
     '}())'
   );
@@ -37,6 +37,7 @@ function onNode(node) {
       node.update('env.callMethod($ENV, ' + node.callee.object.source()
         + ', "' + node.callee.property.name + '"' + argSrc + ')');
     } else {
+      if (node.callee.source() === 'require') { return; }
       node.update('env.call($ENV, ' + node.callee.source() + argSrc + ')');
     }
   } else if (type === 'UnaryExpression' && node.keyword === 'env') {
