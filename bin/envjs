@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+var path = require('path')
+
+require('../requireHook')()
+
+var program = process.argv[2]
+
+process.argv.splice(2, 1)
+
+require(path.join(process.cwd(), program))
+

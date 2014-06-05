@@ -6,6 +6,7 @@ var fs = require('fs');
 
 var utf8 = { encoding: 'utf-8' };
 
+module.exports =
 function addRequireHook() {
   var oldExt = require.extensions['.js'];
   require.extensions['.js'] = function (module, filename) {
@@ -21,16 +22,5 @@ function addRequireHook() {
     return oldExt(module, filename);
   }
 }
-
-if (module.parent === null) {
-  var path = require('path');
-
-  addRequireHook();
-
-  var fname = path.resolve(process.argv[2], process.env.PWD, process.argv[2]);
-  require(fname);
-}
-
-module.exports = addRequireHook;
 
 /* vim: set sw=2 sts=2 et: */
