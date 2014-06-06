@@ -8,5 +8,7 @@ var program = process.argv[2]
 
 process.argv.splice(2, 1)
 
+global.envJsModule = require('../lib/env')
+
 require(path.join(process.cwd(), program))
 

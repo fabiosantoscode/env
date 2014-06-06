@@ -15,11 +15,17 @@ function precompile(source) {
 }
 
 function postWrap(source) {
-  return (
-    '(function () { var env = require(\'env\'); var $ENV = env.create(/* root env */);' +
+  return '(function (env) { var $ENV = env.create(/* root env */);\n' +
     source +
-    '}())'
-  );
+    '}(('+ function() {
+      return typeof window === 'object' ?
+          window.env :
+        (typeof global === 'object' && global.envJsModule) ?
+          global.envJsModule :
+        typeof require === 'function' ?
+          require('env') :
+        env /* good luck with that lel */;
+    } + '())))';
 }
 
 function onNode(node) {
