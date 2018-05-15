@@ -9,9 +9,9 @@ var isKeyword = {
 };
 
 function precompile(source) {
-    return source.replace(/env\s+(\S+)\s*?=(?!=)/gm, function (_, $1) {
-      return '$ENV.' + $1 + ' = ';
-    })
+  return source.replace(/env\s+(\S+)\s*?=(?!=)/gm, function (_, $1) {
+    return '$ENV.' + $1 + ' = ';
+  })
 }
 
 function postWrap(source) {
@@ -32,8 +32,8 @@ function onNode(node) {
   var type = node.type;
   if (type === 'FunctionExpression') {
     var src = node.source()
-        .replace(/^function.*?\(/, 'function ($ENV, ')
-        .replace(/^function \(\$ENV,\s+\)/, 'function ($ENV)')  // zero-argument case
+      .replace(/^function.*?\(/, 'function ($ENV, ')
+      .replace(/^function \(\$ENV,\s+\)/, 'function ($ENV)')  // zero-argument case
     node.update('env.bindLexical($ENV, ' + src + ')');
   } else if (type === 'CallExpression') {
     var argSrc =
